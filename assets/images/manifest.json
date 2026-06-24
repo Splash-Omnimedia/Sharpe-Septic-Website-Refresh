@@ -1,0 +1,15 @@
+{
+  "_comment": "Real Sharpe's assets pulled from the current live site. The prototype currently references the live-CDN URLs directly (build.py: USE_REMOTE_ASSETS = True) so images render immediately for review. Run download-assets.sh to save local copies into this folder, then set USE_REMOTE_ASSETS = False in build.py and re-run `python3 pages.py` to serve them locally. All photos are TEMPORARY stand-ins to be replaced after the approved full-day photography shoot.",
+  "assets": [
+    { "file": "sharpes-logo-current.png",      "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2025/08/Sharpes-add-LLC.png",                         "use": "Primary logo (header + footer). Already includes LLC." },
+    { "file": "sharpes-home-banner.jpg",        "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/banner-home.jpg",                            "use": "Homepage hero image." },
+    { "file": "bestoflex-2025.png",             "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2025/06/BestofLex_Logo2025-1.png",                    "use": "Voted Lexington's Best 2025 award badge (homepage hero). OPEN ITEM: confirm this should remain." },
+    { "file": "sharpes-about-trust.jpg",        "source": "https://www.sharpessepticandwelldrilling.com/wp-content/themes/splashomnimediatheme/images/img-004.jpg",            "use": "Homepage 'symptom' section + Septic Pumping context." },
+    { "file": "sharpes-septic-team.jpg",        "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header1.jpg",                          "use": "Septic Services hero context + Contact sidebar." },
+    { "file": "sharpes-well-frontyard.jpg",     "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header-3.jpg",                         "use": "Well Drilling category context." },
+    { "file": "sharpes-well-tools.jpg",         "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/tools-closeup.jpg",                          "use": "Well Installation context." },
+    { "file": "sharpes-grease-digging.jpg",     "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header-2.jpg",                         "use": "Grease Interceptors category context." },
+    { "file": "sharpes-grease-backing-up.jpg",  "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/backing-up.jpg",                            "use": "Grease Interceptor Installation context." },
+    { "file": "sharpes-precast-frontyard.jpg",  "source": "https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header-4.jpg",                         "use": "Precast Tanks context." }
+  ]
+}
