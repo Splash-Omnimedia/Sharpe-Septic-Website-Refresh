@@ -88,51 +88,55 @@
     }
   });
 
-  /* ---- Contact form: prefill service type from URL ----------
-     Supports /contact/?service=septic-inspection */
+  /* ---- Service-type prefill from URL (supports ?service=septic-inspection)
+     Works across every service <select> on the page (hero form, landing
+     page, contact page) so PPC links can deep-link a service. */
   var params = new URLSearchParams(window.location.search);
   var svc = params.get("service");
-  var svcSelect = document.querySelector("#service-type");
-  if (svc && svcSelect) {
-    var match = Array.prototype.find.call(svcSelect.options, function (o) { return o.value === svc; });
-    if (match) { svcSelect.value = svc; pushTrack("service_type_selection", { service: svc, source: "url" }); }
-  }
-  if (svcSelect) {
-    svcSelect.addEventListener("change", function () {
-      pushTrack("service_type_selection", { service: svcSelect.value, source: "manual" });
+  document.querySelectorAll('select[name="service"]').forEach(function (sel) {
+    if (svc) {
+      var match = Array.prototype.find.call(sel.options, function (o) { return o.value === svc; });
+      if (match) { sel.value = svc; pushTrack("service_type_selection", { service: svc, source: "url" }); }
+    }
+    sel.addEventListener("change", function () {
+      pushTrack("service_type_selection", { service: sel.value, source: "manual" });
     });
-  }
+  });
 
-  /* ---- Contact form: accessible validation ------------------ */
-  var form = document.querySelector("form[data-contact-form]");
-  if (form) {
+  /* ---- Accessible validation for every [data-contact-form] -------
+     Handles the contact page, the homepage hero form, and the PPC
+     landing-page form independently. */
+  document.querySelectorAll("form[data-contact-form]").forEach(function (form) {
     var started = false;
     form.addEventListener("input", function () {
-      if (!started) { started = true; pushTrack("contact_form_start"); }
+      if (!started) { started = true; pushTrack("contact_form_start", { form: form.getAttribute("data-form-name") || "contact" }); }
     });
     form.addEventListener("submit", function (e) {
       var valid = true;
       form.querySelectorAll("[required]").forEach(function (input) {
         var field = input.closest(".field");
         var ok = input.value.trim() !== "" && (input.type !== "email" || /\S+@\S+\.\S+/.test(input.value));
-        if (!ok) { valid = false; field.classList.add("has-error"); input.setAttribute("aria-invalid", "true"); }
-        else { field.classList.remove("has-error"); input.removeAttribute("aria-invalid"); }
+        if (!ok) { valid = false; if (field) field.classList.add("has-error"); input.setAttribute("aria-invalid", "true"); }
+        else { if (field) field.classList.remove("has-error"); input.removeAttribute("aria-invalid"); }
       });
       if (!valid) {
         e.preventDefault();
         var firstErr = form.querySelector(".has-error input, .has-error select, .has-error textarea");
         if (firstErr) firstErr.focus();
       } else {
-        pushTrack("contact_form_submit", { service: svcSelect ? svcSelect.value : "" });
+        var sel = form.querySelector('select[name="service"]');
+        pushTrack("contact_form_submit", { service: sel ? sel.value : "", form: form.getAttribute("data-form-name") || "contact" });
         // Demo only: prevent navigation in static prototype.
         if (form.getAttribute("action") === "{{contactFormEndpoint}}" || !form.getAttribute("action")) {
           e.preventDefault();
           var note = form.querySelector("[data-form-success]");
           if (note) { note.hidden = false; note.focus(); form.querySelectorAll(".field").forEach(function(f){f.style.display="none";}); }
+          var submitRow = form.querySelector("[data-form-submit]");
+          if (submitRow) submitRow.style.display = "none";
         }
       }
     });
-  }
+  });
 
   /* ---- Promo popup (DISABLED by default) --------------------
      Enable by setting data-enabled="true" on .promo-popup and
@@ -164,4 +168,52 @@
   /* ---- Footer year ------------------------------------------ */
   var yr = document.querySelector("[data-year]");
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---- Header: add depth once the page is scrolled ---------- */
+  var header = document.querySelector(".site-header");
+  if (header) {
+    var onScroll = function () {
+      if (window.pageYOffset > 8) header.classList.add("is-scrolled");
+      else header.classList.remove("is-scrolled");
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  /* ---- Scroll reveal (progressive enhancement) --------------
+     Only runs when motion is allowed and IntersectionObserver is
+     available; otherwise content stays fully visible (no .reveal
+     class is ever added). Elements above the fold reveal at once. */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    var selectors = [
+      ".section .card", ".section .testimonial", ".section .step",
+      ".split > *", ".trust-item", ".faq-item", ".related-grid a",
+      ".section > .container > .center"
+    ];
+    var nodes = document.querySelectorAll(selectors.join(","));
+    if (nodes.length) {
+      nodes.forEach(function (el) {
+        el.classList.add("reveal");
+        // stagger items within the same grid row
+        var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+        if (sibs > 0 && sibs < 4) el.setAttribute("data-reveal-i", String(sibs));
+      });
+      var io = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+      nodes.forEach(function (el) { io.observe(el); });
+      // Safety net: if anything is still hidden after load, reveal it.
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          nodes.forEach(function (el) { el.classList.add("is-visible"); });
+        }, 1200);
+      });
+    }
+  }
 })();
