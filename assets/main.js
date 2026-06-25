@@ -186,19 +186,27 @@
      class is ever added). Elements above the fold reveal at once. */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduceMotion && "IntersectionObserver" in window) {
+    // gate the CSS hidden-states so no-JS users always see content
+    document.documentElement.classList.add("js-anim");
     var selectors = [
       ".section .card", ".section .testimonial", ".section .step",
       ".split > *", ".trust-item", ".faq-item", ".related-grid a",
-      ".section > .container > .center"
+      ".section > .container > .center", ".symptom-card", ".sign-card", ".qa-card"
     ];
-    var nodes = document.querySelectorAll(selectors.join(","));
+    var auto = document.querySelectorAll(selectors.join(","));
+    auto.forEach(function (el) {
+      el.classList.add("reveal");
+      var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+      if (sibs > 0 && sibs < 4) el.setAttribute("data-reveal-i", String(sibs));
+    });
+    // combine auto-reveal elements with explicit [data-anim] (directional) elements
+    var directional = document.querySelectorAll("[data-anim]");
+    var nodes = [];
+    auto.forEach(function (el) { nodes.push(el); });
+    directional.forEach(function (el) { nodes.push(el); });
+    // connector-line containers: get .is-visible to trigger the scroll-drawn lines
+    document.querySelectorAll(".feature-grid, .steps-flow").forEach(function (el) { nodes.push(el); });
     if (nodes.length) {
-      nodes.forEach(function (el) {
-        el.classList.add("reveal");
-        // stagger items within the same grid row
-        var sibs = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
-        if (sibs > 0 && sibs < 4) el.setAttribute("data-reveal-i", String(sibs));
-      });
       var io = new IntersectionObserver(function (entries, obs) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
@@ -208,12 +216,50 @@
         });
       }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
       nodes.forEach(function (el) { io.observe(el); });
-      // Safety net: if anything is still hidden after load, reveal it.
+      // Safety net: reveal everything shortly after load in case anything is missed.
       window.addEventListener("load", function () {
         setTimeout(function () {
           nodes.forEach(function (el) { el.classList.add("is-visible"); });
-        }, 1200);
+        }, 1400);
       });
     }
   }
+
+  /* ---- Animated stat counters --------------------------------- */
+  var statNums = document.querySelectorAll(".stat-num[data-count]");
+  if (statNums.length && "IntersectionObserver" in window) {
+    var statIO = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target, target = parseFloat(el.getAttribute("data-count")), suf = el.getAttribute("data-suffix") || "";
+        obs.unobserve(el);
+        if (reduceMotion) { el.textContent = target + suf; return; }
+        var dur = 1400, start = null;
+        function tick(ts) {
+          if (!start) start = ts;
+          var p = Math.min((ts - start) / dur, 1);
+          var eased = 0.5 - Math.cos(p * Math.PI) / 2; // easeInOut
+          el.textContent = Math.round(target * eased) + suf;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    statNums.forEach(function (el) { statIO.observe(el); });
+  }
+
+  /* ---- Back-to-top button ------------------------------------- */
+  var toTop = document.createElement("button");
+  toTop.className = "to-top";
+  toTop.type = "button";
+  toTop.setAttribute("aria-label", "Back to top");
+  toTop.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>';
+  document.body.appendChild(toTop);
+  toTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) ? "auto" : "smooth" });
+  });
+  window.addEventListener("scroll", function () {
+    if (window.pageYOffset > 600) toTop.classList.add("show");
+    else toTop.classList.remove("show");
+  }, { passive: true });
 })();

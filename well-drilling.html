@@ -15,6 +15,8 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
+  <!-- Promo announcement bar -->
+  <div class="promo-bar">Septic, well &amp; grease service across the Midlands <span class="pb-dot">|</span> <span class="pb-hide">Family owned since 1966 <span class="pb-dot">|</span> </span><a href="tel:+18037551615" data-track="phone_click">Call (803) 755-1615</a></div>
   <!-- Utility bar: phone + service area -->
   <div class="utility-bar">
     <div class="container">
@@ -97,17 +99,61 @@
   </header>
   <main id="main">
   <!-- ============ HERO ============ -->
-  <section class="hero hero--sub hero--home">
+  <section class="hero hero--home">
     <!-- Temporary current-site background image. Replace after approved full-day photography shoot. -->
     <img class="hero-bg" src="https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header-3.jpg" alt="" aria-hidden="true" decoding="async" referrerpolicy="no-referrer">
     <span class="hero-scrim" aria-hidden="true"></span>
     <div class="container">
-      <p class="eyebrow">Clean, dependable water</p>
-      <h1>Well Drilling &amp; Well Services</h1>
-      <p>From new well installation to repairs, maintenance, and inspections, Sharpe's keeps Midlands properties supplied with clean, dependable water — backed by decades of local experience.</p>
-      <div class="hero-actions">
-        <a class="btn btn--primary btn--lg" href="contact.html?service=well-installation" data-track="request_estimate_click">Schedule Well Service</a>
+      <div class="hero-copy">
+        <p class="eyebrow">Clean, dependable water</p>
+        <h1>Well Drilling &amp; Well Services</h1>
+        <p>From new well installation to repairs, maintenance, and inspections, Sharpe's keeps Midlands properties supplied with clean, dependable water — backed by decades of local experience.</p>
         <a class="btn btn--ghost btn--lg" href="tel:+18037551615" data-track="phone_click">Call (803) 755-1615</a>
+      </div>
+      <div class="hero-form-card">
+        <p class="hero-form-title">Request service</p>
+        <p class="hero-form-sub">Tell us what's going on and a local Sharpe's team member will follow up quickly.</p>
+        <p class="form-success" data-form-success tabindex="-1" hidden role="status">Thank you for contacting Sharpe's. Our team has received your request and will follow up to help you determine the next step.</p>
+        <!-- Connect a production endpoint before launch (set the form action). -->
+        <form data-contact-form data-form-name="service_hero" action="" method="post" novalidate>
+          <div class="field">
+            <label for="sh-name">Name <span class="req" aria-hidden="true">*</span></label>
+            <input id="sh-name" name="name" type="text" autocomplete="name" required aria-required="true" aria-describedby="sh-name-err">
+            <span class="error-msg" id="sh-name-err">Please enter your name.</span>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="sh-phone">Phone <span class="req" aria-hidden="true">*</span></label>
+              <input id="sh-phone" name="phone" type="tel" autocomplete="tel" required aria-required="true" aria-describedby="sh-phone-err">
+              <span class="error-msg" id="sh-phone-err">Please enter a phone number.</span>
+            </div>
+            <div class="field">
+              <label for="sh-email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input id="sh-email" name="email" type="email" autocomplete="email" required aria-required="true" aria-describedby="sh-email-err">
+              <span class="error-msg" id="sh-email-err">Please enter a valid email.</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="sh-service">Service needed</label>
+            <select id="sh-service" name="service" data-track="service_type_selection">
+                <option value="" disabled selected>Select a service…</option>
+                <option value="septic-pumping">Septic Pumping</option>
+                <option value="septic-inspection">Septic Inspection</option>
+                <option value="septic-repair">Septic Repair / Replacement</option>
+                <option value="septic-installation">Septic Installation</option>
+                <option value="well-installation">Well Installation</option>
+                <option value="well-repair">Well Repair / Maintenance</option>
+                <option value="well-inspection">Well Inspection</option>
+                <option value="grease-interceptor-installation">Grease Interceptor Installation</option>
+                <option value="grease-interceptor-pumping">Grease Interceptor Pumping / Inspection</option>
+                <option value="precast-tanks">Precast Tanks</option>
+                <option value="other">Other / Not Sure</option>
+            </select>
+          </div>
+          <div data-form-submit>
+            <button class="btn btn--primary btn--block" type="submit" data-track="request_estimate_click">Request Service</button>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -121,16 +167,22 @@
           <p class="lead">Your well is the source of your water — it deserves experienced care. We handle the full lifecycle, from drilling a new well to keeping an existing one running. We serve Columbia, Gaston, Lexington, and the surrounding Midlands.</p>
           <ul class="checklist"><li>New well installation and drilling</li><li>Repairs and ongoing maintenance</li><li>Well inspections for sales and peace of mind</li><li>Local crews who know Midlands conditions</li></ul>
         </div>
-        <div><!-- Temporary current-site image. Replace after approved full-day photography shoot. -->
+        <div class="zoom"><!-- Temporary current-site image. Replace after approved full-day photography shoot. -->
         <img class="media" src="https://www.sharpessepticandwelldrilling.com/wp-content/uploads/2019/07/child-header-3.jpg" alt="Front-yard excavation for a Sharpe's well drilling project" loading="lazy" decoding="async" referrerpolicy="no-referrer"></div>
       </div>
     </div>
   </section>
-  <!-- ============ DIRECT ANSWER ============ -->
-  <section class="section section--tight">
-    <div class="container" style="max-width:840px">
-      <p class="eyebrow">Quick answer</p>
-        <div style="margin-top:18px"><h2 style="font-size:1.3rem;margin-bottom:8px">Do you drill new wells in the Midlands?</h2><p class="lead" style="margin:0">Yes. Sharpe's drills and installs new wells and services existing ones across Columbia, Gaston, Lexington, and the surrounding Midlands. Whether you need a brand-new well, a repair, or an inspection before a property sale, one local team handles it all.</p></div>
+  <!-- ============ QUICK ANSWER ============ -->
+  <section class="section section--alt qa-section">
+    <div class="container">
+      <div class="qa-card">
+        <span class="qa-icon" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.8 10.7c.6.5 1 1.2 1.1 2.3h5.4c.1-1.1.5-1.8 1.1-2.3A6 6 0 0 0 12 3Z"/></svg></span>
+        <div class="qa-body">
+          <p class="qa-eyebrow">Quick answer</p>
+          <h2 class="qa-q">Do you drill new wells in the Midlands?</h2>
+          <p class="qa-a">Yes. Sharpe's drills and installs new wells and services existing ones across Columbia, Gaston, Lexington, and the surrounding Midlands. Whether you need a brand-new well, a repair, or an inspection before a property sale, one local team handles it all.</p>
+        </div>
+      </div>
     </div>
   </section>
   <!-- ============ SERVICE CARDS / DETAILS ============ -->
@@ -148,7 +200,7 @@
   <section class="section section--alt">
     <div class="container">
       <div class="center"><p class="eyebrow">How it works</p><h2>What to expect</h2></div>
-      <div class="grid grid-3" style="margin-top:40px">
+      <div class="grid grid-3 steps-flow" style="margin-top:40px">
         <div class="step"><div class="step-num" aria-hidden="true">1</div><h3>Reach out</h3><p>Tell us what you need — a new well or service on an existing one.</p></div>
         <div class="step"><div class="step-num" aria-hidden="true">2</div><h3>We assess</h3><p>We evaluate your site or system and explain the options.</p></div>
         <div class="step"><div class="step-num" aria-hidden="true">3</div><h3>We deliver</h3><p>We complete the work and confirm your water is dependable.</p></div>
@@ -157,6 +209,7 @@
   </section>
   <!-- ============ TRUST / PROOF ============ -->
   <section class="trust-bar">
+    <svg class="wave-top" viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true"><path d="M0,34 C200,6 380,6 560,28 C760,52 940,54 1140,34 C1280,20 1360,22 1440,30 L1440,64 L0,64 Z" fill="#2B2A28"/></svg>
     <div class="container">
       <div class="trust-item"><span class="ti-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 9.5h16M8 3.5v4M16 3.5v4"/></svg></span><div><strong>Since 1966</strong><span>Decades of local experience</span></div></div>
       <div class="trust-item"><span class="ti-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.5 5 6v6c0 4.2 3 7 7 8.5 4-1.5 7-4.3 7-8.5V6l-7-2.5Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><strong>Licensed &amp; insured</strong><span>SC contractor</span></div></div>
@@ -199,13 +252,14 @@
   </section>
   <!-- ============ FINAL CTA ============ -->
   <section class="cta-band">
+    <svg class="wave-top" viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true"><path d="M0,34 C200,6 380,6 560,28 C760,52 940,54 1140,34 C1280,20 1360,22 1440,30 L1440,64 L0,64 Z" fill="#DB222A"/></svg>
     <div class="container">
       <div>
-        <h2>Need well service?</h2>
-        <p>Call now or request service online and a local Sharpe's team member will help.</p>
+        <h2>Ready when you are</h2>
+        <p>Request service using the form above, or call our local team and we'll help you figure out the right next step.</p>
       </div>
       <div class="hero-actions" style="display:flex;gap:16px;flex-wrap:wrap">
-        <a class="btn btn--primary btn--lg" href="contact.html" data-track="request_estimate_click">Schedule Service</a>
+        <a class="btn btn--primary btn--lg" href="contact.html" data-track="request_estimate_click">Request Service</a>
         <a class="btn btn--ghost btn--lg" href="tel:+18037551615" data-track="phone_click">Call (803) 755-1615</a>
       </div>
     </div>
